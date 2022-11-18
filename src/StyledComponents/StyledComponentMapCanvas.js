@@ -2,8 +2,8 @@ import styled from "styled-components";
 import map from '../Images/map.png';
 
 export const Canvas = styled.canvas`
-    height: 700px;
-    width: 1000px;
+    height: 600px;
+    width: 900px;
     background-image: url(${map});
 `
 

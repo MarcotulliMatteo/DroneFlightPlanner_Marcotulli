@@ -11,7 +11,7 @@ export const Container = styled.div`
 export const ListContainer = styled.div`
     padding: 30px;
     flex: 7;
-    max-height: 470px;
+    max-height: 430px;
     overflow-y: auto;
 `
 
@@ -28,7 +28,7 @@ export const FightSearchInput = styled.input`
 `
 
 export const CreationContainer = styled.div`
-    flex: 1.3;
+    flex: 1.8;
     display: flex;
     flex-direction: column;
 `

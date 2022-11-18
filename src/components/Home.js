@@ -1,7 +1,7 @@
-import MapCanvas from "../components/MapCanvas";
+import MapCanvas from "./MapCanvas";
 import React from "react";
 import { HomeBody, ContainerComponent, MapContainer } from '../StyledComponents/StyledComponentHome';
-import FlightList from "../components/FlightList";
+import FlightList from "./FlightList";
 
 const Home = () => {
     return (

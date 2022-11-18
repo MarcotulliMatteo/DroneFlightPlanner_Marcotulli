@@ -3,8 +3,8 @@ import MapCanvas from "../components/MapCanvas";
 import React from "react";
 import styled from "styled-components";
 import FlightList from "../components/FlightList";
-import { useDispatch } from "react-redux"
-import { ADD_FLIGHT } from '../redux/actions/index'
+import { useDispatch } from "react-redux";
+import { ADD_FLIGHT } from '../redux/actions/index';
 
 const Home = () => {
     const [selectedFlight, setSelectedFlight] = useState({});

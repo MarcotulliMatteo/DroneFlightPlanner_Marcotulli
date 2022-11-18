@@ -35,7 +35,8 @@ const FlightList = ({selectedFlight, setSelectedFlight, newFlightName, setNewFli
                                 index={elem.key}
                                 key={elem.key}
                                 isChecked={selectedFlight.key === elem.key ? true : false}
-                                handleCheck={handleCheck}/>
+                                handleCheck={handleCheck}
+                                isCreationMode={isCreationMode}/>
                             )
                         }) 
                     :

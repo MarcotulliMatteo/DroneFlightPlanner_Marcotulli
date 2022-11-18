@@ -1,11 +1,13 @@
 import styled from "styled-components";
+import { useSelector } from "react-redux"
 
-const ListItem = ({value, index, isChecked, handleCheck, isCreationMode}) => {
+const ListItem = ({value, index, isChecked, handleCheck}) => {
+    const plannedFlightStore = useSelector(state => state.plannedFlightReducer);
 
     return (
         <ItemContainer>
-            <InputCheckBox value={index} type='checkbox' onChange={handleCheck} checked={isChecked} isCreationMode={isCreationMode}/>
-            <Text>{value.name}</Text>
+            <InputCheckBox key={index} value={index} type='checkbox' onChange={handleCheck} checked={isChecked} isCreationMode={plannedFlightStore.isCreationMode}/>
+            <Text key={index}>{value.name}</Text>
         </ItemContainer>
     )
 }

@@ -1,24 +1,48 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import styled from "styled-components";
 import ListItem from "./ListItem";
+import { ADD_NEW_FLIGHT_NAME, SELECTED_FLIGHT, RESET_NEW_PLANNING_VALUES, ADD_FLIGHT, IS_CREATION_MODE, RESET_SELECTED_FLIGHT } from '../redux/actions/index';
 
-const FlightList = ({selectedFlight, setSelectedFlight, newFlightName, setNewFlightName, isCreationMode, setIsCreationMode, createNewPlanning, cancelNewPlanning}) => {
-    const flightList = useSelector(state => state.plannedFlightReducer);
+const FlightList = () => {
+    const plannedFlightStore = useSelector(state => state.plannedFlightReducer);
+    const dispatch = useDispatch();
 
     const [searchedFlight, setSearchedFlight] = useState([]);
     const [searchString, setSearchString] = useState('');
     
     useEffect(() => {
-        const filteredList = flightList.filter(elem => {
+        const filteredList = plannedFlightStore.flightList.filter(elem => {
             return elem.name.toLowerCase().includes(searchString.toLowerCase())
         })
         setSearchedFlight(filteredList)
-    }, [flightList, searchString])
+    }, [plannedFlightStore.flightList, searchString])
 
     const handleCheck = (event) => {
-        const selected = flightList.find(elem => elem.key.toString() === event.target.value)
-        setSelectedFlight(selected)
+        const selected = plannedFlightStore.flightList.find(elem => elem.key.toString() === event.target.value)
+        dispatch({type: SELECTED_FLIGHT, payload: {selectedFlight: selected}})
+    }
+
+    const createNewPlanning = () => {
+        if(plannedFlightStore.newCoordinates.length < 1 || plannedFlightStore.newFlightName === '') {
+            return alert("You have to type a name and draw a planning on the map for go ahead!")
+        }
+
+        const payload = {
+            name: plannedFlightStore.newFlightName,
+            coordinates: plannedFlightStore.newCoordinates
+        }
+        dispatch({type: ADD_FLIGHT, payload});
+        cancelNewPlanningValues()
+    }
+
+    const cancelNewPlanningValues = () => {
+        dispatch({type: RESET_NEW_PLANNING_VALUES});
+    }
+
+    const handleCreationMode = () => {
+        dispatch({type: IS_CREATION_MODE});
+        dispatch({type: RESET_SELECTED_FLIGHT});
     }
 
     return (
@@ -34,9 +58,8 @@ const FlightList = ({selectedFlight, setSelectedFlight, newFlightName, setNewFli
                                 <ListItem value={elem}
                                 index={elem.key}
                                 key={elem.key}
-                                isChecked={selectedFlight.key === elem.key ? true : false}
-                                handleCheck={handleCheck}
-                                isCreationMode={isCreationMode}/>
+                                isChecked={plannedFlightStore.selectedFlight.key === elem.key ? true : false}
+                                handleCheck={handleCheck}/>
                             )
                         }) 
                     :
@@ -48,17 +71,19 @@ const FlightList = ({selectedFlight, setSelectedFlight, newFlightName, setNewFli
             </ListContainer>
             <CreationContainer>
                 <NewPlannedFlightNameInput
-                 isVisible={isCreationMode}
-                 value={newFlightName}
-                 onChange={(e) => setNewFlightName(e.target.value)}
+                 isVisible={plannedFlightStore.isCreationMode}
+                 value={plannedFlightStore.newFlightName}
+                 onChange={(e) => {
+                    dispatch({type: ADD_NEW_FLIGHT_NAME, payload: {newFlightName: e.target.value}})
+                 }}
                  placeholder='Insert new planning name'/>
                 <ButtonContainer>
-                    <CreateNewButton onClick={() => setIsCreationMode(true)}
-                     isCreationMode={isCreationMode}>Draw New Planning</CreateNewButton>
-                    <SaveButton onClick={() => createNewPlanning()}
-                     isCreationMode={isCreationMode}>Save</SaveButton>
-                    <CancelButton onClick={() => cancelNewPlanning()}
-                     isCreationMode={isCreationMode}>Cancel</CancelButton>
+                    <CreateNewButton onClick={handleCreationMode}
+                     isCreationMode={plannedFlightStore.isCreationMode}>Draw New Planning</CreateNewButton>
+                    <SaveButton onClick={createNewPlanning}
+                     isCreationMode={plannedFlightStore.isCreationMode}>Save</SaveButton>
+                    <CancelButton onClick={cancelNewPlanningValues}
+                     isCreationMode={plannedFlightStore.isCreationMode}>Cancel</CancelButton>
                 </ButtonContainer>
             </CreationContainer>
         </Container>

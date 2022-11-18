@@ -1,62 +1,16 @@
-import { useState } from "react";
 import MapCanvas from "../components/MapCanvas";
 import React from "react";
 import styled from "styled-components";
 import FlightList from "../components/FlightList";
-import { useDispatch } from "react-redux";
-import { ADD_FLIGHT } from '../redux/actions/index';
 
 const Home = () => {
-    const [selectedFlight, setSelectedFlight] = useState({});
-    const [newFlightName, setNewFlightName] = useState('');
-    const [isCreationMode, setIsCreationMode] = useState(false);
-    const [coordinates, setCoordinates] = useState([]);
-
-    const dispatch = useDispatch();
-
-    const handleCreationMode = (value) => {
-        setIsCreationMode(value);
-        setSelectedFlight({});
-    }
-
-    const createNewPlanning = () => {
-        if(coordinates.length < 1 || newFlightName === '') {
-            alert("You have to type a name and draw a planning on the map for go ahead!")
-            return
-        }
-
-        const payload = {
-            name: newFlightName,
-            coordinates: coordinates
-        }
-        dispatch({type: ADD_FLIGHT, payload});
-        cancelNewPlanningValues()
-    }
-
-    const cancelNewPlanningValues = () => {
-        setNewFlightName('');
-        setIsCreationMode(false);
-        setCoordinates([]);
-        setSelectedFlight({});
-    }
-
     return (
         <React.Fragment>
             <HomeBody>
                 <ContainerComponent>
-                    <FlightList selectedFlight={selectedFlight}
-                     setSelectedFlight={(flight) => setSelectedFlight(flight)}
-                     newFlightName={newFlightName}
-                     setNewFlightName={(name) => {setNewFlightName(name)}}
-                     isCreationMode={isCreationMode}
-                     setIsCreationMode={(value) => handleCreationMode(value)}
-                     createNewPlanning={createNewPlanning}
-                     cancelNewPlanning={cancelNewPlanningValues}/>
+                    <FlightList/>
                     <MapContainer>
-                        <MapCanvas selectedFlight={selectedFlight}
-                         isCreationMode={isCreationMode}
-                         coordinates={coordinates}
-                         setCoordinates={(coord) => setCoordinates(coord)}/>
+                        <MapCanvas/>
                     </MapContainer>
                 </ContainerComponent>
             </HomeBody>

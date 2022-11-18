@@ -1,10 +1,14 @@
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import map from '../Images/map.png';
+import { useSelector, useDispatch } from "react-redux"
+import { ADD_NEW_COORDINATES } from '../redux/actions/index';
 
-const MapCanvas = ({selectedFlight, isCreationMode, coordinates, setCoordinates}) => {
+const MapCanvas = () => {
     const canvasRef = useRef(null);
     const contextRef = useRef(null);
+    const plannedFlightStore = useSelector(state => state.plannedFlightReducer);
+    const dispatch = useDispatch();
     
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -16,8 +20,8 @@ const MapCanvas = ({selectedFlight, isCreationMode, coordinates, setCoordinates}
         context.strokeStyle = "red";
         contextRef.current = context;
 
-        if(selectedFlight.hasOwnProperty('coordinates')) {
-            const coord = selectedFlight.coordinates
+        if(plannedFlightStore.selectedFlight.hasOwnProperty('coordinates')) {
+            const coord = plannedFlightStore.selectedFlight.coordinates
             for(let i = 0; i < coord.length; i++) {
                 draw(coord[i], coord[i]);
                 if(coord[i + 1]) {
@@ -25,20 +29,20 @@ const MapCanvas = ({selectedFlight, isCreationMode, coordinates, setCoordinates}
                 }
             }
         }
-    }, [selectedFlight])
+    }, [plannedFlightStore.selectedFlight])
 
     const drawPoint = ({nativeEvent}) => {
-        if(!isCreationMode) return
+        if(!plannedFlightStore.isCreationMode) return
         const {offsetX, offsetY} = nativeEvent;
         draw([offsetX, offsetY], [offsetX, offsetY]);
 
-        const coord = [...coordinates];
+        const coord = [...plannedFlightStore.newCoordinates];
         if(coord.length > 0) {
             const [prevX, prevY] = coord[coord.length - 1];
             draw([prevX, prevY], [offsetX, offsetY], 5);
         }
         coord.push([offsetX, offsetY]);
-        setCoordinates(coord);
+        dispatch({type: ADD_NEW_COORDINATES, payload: {newCoordinates: coord}})
 
         nativeEvent.preventDefault();
     }

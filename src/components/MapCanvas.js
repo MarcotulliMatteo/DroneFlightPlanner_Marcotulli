@@ -1,8 +1,7 @@
 import { useEffect, useRef } from "react";
-import styled from "styled-components";
-import map from '../Images/map.png';
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector, useDispatch } from "react-redux";
 import { ADD_NEW_COORDINATES } from '../redux/actions/index';
+import { Canvas, ContainerCanvas } from '../StyledComponents/StyledComponentMapCanvas';
 
 const MapCanvas = () => {
     const canvasRef = useRef(null);
@@ -68,13 +67,3 @@ const MapCanvas = () => {
 }
 
 export default MapCanvas;
-
-const Canvas = styled.canvas`
-    height: 700px;
-    width: 1000px;
-    background-image: url(${map});
-`
-
-const ContainerCanvas = styled.div`
-    padding: 20px;
-`

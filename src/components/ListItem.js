@@ -6,8 +6,8 @@ const ListItem = ({value, index, isChecked, handleCheck}) => {
 
     return (
         <ItemContainer>
-            <InputCheckBox key={index} value={index} type='checkbox' onChange={handleCheck} checked={isChecked} isCreationMode={plannedFlightStore.isCreationMode}/>
-            <Text key={index}>{value.name}</Text>
+            <InputCheckBox value={index} type='checkbox' onChange={handleCheck} checked={isChecked} isCreationMode={plannedFlightStore.isCreationMode}/>
+            <Text>{value.name}</Text>
         </ItemContainer>
     )
 }
